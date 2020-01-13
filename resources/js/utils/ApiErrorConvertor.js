@@ -4,6 +4,7 @@ export function formErrorConvertor(error, fields = []) {
         const response = error.response.data;
         obj.message = response.message;
         fields.forEach(field => {
+            if (response.errors[field])
             obj[field] = response.errors[field].join(',')
         });
     } else if (error.response && error.response.data) {

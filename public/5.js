@@ -563,7 +563,7 @@ function formErrorConvertor(error) {
     var response = error.response.data;
     obj.message = response.message;
     fields.forEach(function (field) {
-      obj[field] = response.errors[field].join(',');
+      if (response.errors[field]) obj[field] = response.errors[field].join(',');
     });
   } else if (error.response && error.response.data) {
     var _response = error.response.data;

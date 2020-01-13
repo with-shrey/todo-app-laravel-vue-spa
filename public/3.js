@@ -42,6 +42,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
 
 
 
@@ -602,7 +603,9 @@ var render = function() {
       _c("form", { staticClass: "card-body", on: { submit: _vm.createTodo } }, [
         _vm.error.message
           ? _c("div", { staticClass: "alert alert-danger" }, [
-              _vm._v("\n        " + _vm._s(_vm.error.message) + "\n    ")
+              _vm._v(
+                "\n            " + _vm._s(_vm.error.message) + "\n        "
+              )
             ])
           : _vm._e(),
         _vm._v(" "),
@@ -1176,7 +1179,7 @@ function formErrorConvertor(error) {
     var response = error.response.data;
     obj.message = response.message;
     fields.forEach(function (field) {
-      obj[field] = response.errors[field].join(',');
+      if (response.errors[field]) obj[field] = response.errors[field].join(',');
     });
   } else if (error.response && error.response.data) {
     var _response = error.response.data;
