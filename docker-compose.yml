@@ -1,0 +1,62 @@
+version: '2'
+
+services:
+  laravel:
+    tty: true
+    image: netfiradev/php-7.2-cli-alpine
+    command: php artisan serve --host 0.0.0.0 --port=8080
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+    volumes:
+      - ./:/var/www/
+    depends_on:
+      - db
+    # privileged: true # Privileged mode could be required to run this container under Windows
+
+  vue:
+    tty: true
+    image: connectwithshrey/node-axom:12.13.1-alpine
+    command: npm run watch
+    working_dir: /app
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    # privileged: true # Privileged mode could be required to run this container under Windows
+
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: on-failure
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+    logging:
+      driver: "none"
